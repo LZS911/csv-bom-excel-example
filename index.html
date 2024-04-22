@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Download CSV</title>
+  </head>
+  <body>
+    <button id="download-btn">Download CSV</button>
+    <script>
+      document
+        .getElementById('download-btn')
+        .addEventListener('click', function () {
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', '/download', true);
+          xhr.responseType = 'blob'; // 设置响应类型为blob
+
+          xhr.onload = function () {
+            if (xhr.status === 200) {
+              var blob = new Blob([xhr.response], { type: 'text/csv' });
+              var link = document.createElement('a');
+              link.href = URL.createObjectURL(blob);
+              link.download = 'export.csv'; // 设置下载文件的名称
+              link.click();
+            } else {
+              console.error('An error occurred during the download.');
+            }
+          };
+
+          xhr.onerror = function () {
+            console.error('An error occurred during the request.');
+          };
+
+          xhr.send();
+        });
+    </script>
+  </body>
+</html>
